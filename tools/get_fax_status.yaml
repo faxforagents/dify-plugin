@@ -1,0 +1,31 @@
+identity:
+  name: get_fax_status
+  author: faxforagents
+  label:
+    en_US: Get fax status
+description:
+  human:
+    en_US: The state of one fax (queued, active, delivered, partial, failed or unknown) with the carrier's evidence once delivered.
+  llm: Returns the state of one fax by fax_id, queued, active, delivered, partial, failed or unknown, and once delivered or partial the carrier's evidence (pages, timestamps, provider reference). The evidence is what the carrier reported, not legal proof the recipient accepted it. A partial or unknown fax never retransmits on its own.
+parameters:
+  - name: fax_id
+    type: string
+    required: true
+    form: llm
+    label:
+      en_US: Fax id
+    human_description:
+      en_US: The fax from Send fax (fax_...).
+    llm_description: The fax id returned by Send fax.
+output_schema:
+  type: object
+  properties:
+    state:
+      type: string
+      description: queued, active, delivered, partial, failed or unknown.
+    pages_sent:
+      type: number
+      description: Pages the carrier reported as sent.
+extra:
+  python:
+    source: tools/get_fax_status.py

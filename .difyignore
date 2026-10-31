@@ -1,0 +1,12 @@
+.git
+.github
+.gitignore
+.difyignore
+scripts
+tests
+__pycache__
+*.pyc
+*.difypkg
+.venv
+.pytest_cache
+.ruff_cache

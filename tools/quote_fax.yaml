@@ -1,0 +1,105 @@
+identity:
+  name: quote_fax
+  author: faxforagents
+  label:
+    en_US: Quote fax
+description:
+  human:
+    en_US: Prepare a document from text or Markdown (or reuse a document id) and price it to one fax number. Nothing is sent.
+  llm: Prepares a fax document from text or Markdown, or takes an existing document_id, and returns the exact price of sending it to one E.164 number as a quote valid ten minutes. Returns quote_id, document_id and whether a human approval is required. Nothing is sent; call Send fax with the quote_id.
+parameters:
+  - name: to
+    type: string
+    required: true
+    form: llm
+    label:
+      en_US: To
+    human_description:
+      en_US: The destination fax number in E.164, for example +12025550123. With a test key, +15550000001 is delivered.
+    llm_description: The destination fax number in E.164 format, for example +12025550123.
+  - name: text
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: Text
+    human_description:
+      en_US: Plain text rendered to a letter PDF. Pass one of text, markdown or document id.
+    llm_description: Plain text of the fax, rendered to a letter PDF. Use this or markdown or document_id, not two.
+  - name: markdown
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: Markdown
+    human_description:
+      en_US: Markdown (headings, lists, emphasis, code) rendered to PDF.
+    llm_description: Markdown of the fax, rendered to PDF. Use this or text or document_id, not two.
+  - name: document_id
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: Document id
+    human_description:
+      en_US: An existing document (doc_...), for example one created through the REST API from an uploaded PDF.
+    llm_description: An existing document id (doc_ followed by 32 hex characters) to quote instead of new text.
+  - name: filename
+    type: string
+    required: false
+    form: form
+    label:
+      en_US: Filename
+    human_description:
+      en_US: A name for the document, shown in the dashboard.
+  - name: to_name
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: Cover sheet, to name
+    human_description:
+      en_US: Fills a cover sheet in front of the document. A cover sheet counts as a billable page.
+    llm_description: Recipient name on an optional cover sheet. Any cover field adds a billable cover page.
+  - name: from_name
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: Cover sheet, from name
+    human_description:
+      en_US: The sender name on the cover sheet.
+    llm_description: Sender name on the optional cover sheet.
+  - name: subject
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: Cover sheet, subject
+    human_description:
+      en_US: The subject line on the cover sheet.
+    llm_description: Subject line on the optional cover sheet.
+  - name: message
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: Cover sheet, message
+    human_description:
+      en_US: A short message on the cover sheet.
+    llm_description: Short message on the optional cover sheet.
+output_schema:
+  type: object
+  properties:
+    quote_id:
+      type: string
+      description: The quote to pass to Send fax.
+    document_id:
+      type: string
+      description: The prepared document.
+    authorization_required:
+      type: boolean
+      description: True when a person must approve this send before it goes out.
+extra:
+  python:
+    source: tools/quote_fax.py

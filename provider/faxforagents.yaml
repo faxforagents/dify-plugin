@@ -1,0 +1,31 @@
+identity:
+  author: faxforagents
+  name: faxforagents
+  label:
+    en_US: Fax for Agents
+  description:
+    en_US: Send faxes and read received ones through the Fax for Agents API. Quote a document to a number, send the quoted fax, follow its status and read the inbox.
+  icon: icon.svg
+  tags:
+    - business
+    - utilities
+credentials_for_provider:
+  api_key:
+    type: secret-input
+    required: true
+    label:
+      en_US: Fax for Agents API key
+    placeholder:
+      en_US: ffa_test_... or ffa_live_...
+    help:
+      en_US: Create a key at app.faxforagents.com. A test key reaches the sandbox only and costs nothing. A live key reaches the carrier and spends the prepaid wallet.
+    url: https://app.faxforagents.com
+tools:
+  - tools/quote_fax.yaml
+  - tools/send_fax.yaml
+  - tools/get_fax_status.yaml
+  - tools/list_inbox.yaml
+  - tools/read_inbound_fax.yaml
+extra:
+  python:
+    source: provider/faxforagents.py

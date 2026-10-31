@@ -1,0 +1,57 @@
+identity:
+  name: send_fax
+  author: faxforagents
+  label:
+    en_US: Send fax
+description:
+  human:
+    en_US: Queue a quoted fax. With a live key this spends the wallet. The answer is queued, never delivered.
+  llm: Queues the fax described by a quote_id from Quote fax. If the quote said a human approval is required, pass the approval_id a person granted in the dashboard. Repeating with the same idempotency_key returns the same fax. The answer is queued, never delivered; read Get fax status afterwards.
+parameters:
+  - name: quote_id
+    type: string
+    required: true
+    form: llm
+    label:
+      en_US: Quote id
+    human_description:
+      en_US: The quote from Quote fax (qte_...). A quote is valid ten minutes.
+    llm_description: The quote id returned by Quote fax.
+  - name: approval_id
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: Approval id
+    human_description:
+      en_US: The approval a person granted for this exact quote in the dashboard, when the quote required one.
+    llm_description: The approval id (apr_...) of an approved request bound to this quote, when authorization_required was true.
+  - name: client_reference
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: Client reference
+    human_description:
+      en_US: Your own reference for this fax, up to 200 characters.
+    llm_description: An optional reference of your own, up to 200 characters.
+  - name: idempotency_key
+    type: string
+    required: false
+    form: form
+    label:
+      en_US: Idempotency key
+    human_description:
+      en_US: "Repeating a send with the same key returns the same fax instead of a second one. Empty means dify: followed by the quote id."
+output_schema:
+  type: object
+  properties:
+    fax_id:
+      type: string
+      description: The fax to follow with Get fax status.
+    state:
+      type: string
+      description: queued at this point.
+extra:
+  python:
+    source: tools/send_fax.py
