@@ -43,13 +43,14 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Fetch dify-plugin 0.6.13 (checksum pinned)
         run: |
-          curl -sSL -o dify-plugin https://github.com/langgenius/dify-plugin-daemon/releases/download/0.6.13/dify-plugin-linux-amd64
-          echo "9e767eea4c378932969fca83673d7883912fb4654dfd52ec9fd3d902c80d849e  dify-plugin" | sha256sum -c -
-          chmod +x dify-plugin
+          curl -sSL -o "$RUNNER_TEMP/dify-plugin" https://github.com/langgenius/dify-plugin-daemon/releases/download/0.6.13/dify-plugin-linux-amd64
+          echo "9e767eea4c378932969fca83673d7883912fb4654dfd52ec9fd3d902c80d849e  $RUNNER_TEMP/dify-plugin" | sha256sum -c -
+          chmod +x "$RUNNER_TEMP/dify-plugin"
       - name: Package
         run: |
           VERSION=$(sed -n 's/^version: //p' manifest.yaml | head -1)
-          ./dify-plugin plugin package . -o "faxforagents-${VERSION}.difypkg"
+          "$RUNNER_TEMP/dify-plugin" plugin package . -o "$RUNNER_TEMP/faxforagents-${VERSION}.difypkg"
+          cp "$RUNNER_TEMP/faxforagents-${VERSION}.difypkg" .
           unzip -l "faxforagents-${VERSION}.difypkg"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
